@@ -1,0 +1,333 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Courgette&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 10px; 
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #555; 
+}
+
+::-webkit-scrollbar-track {
+    background-color: #2d2d2d; 
+    border-radius: 10px; 
+    display: none;
+}
+pre::-webkit-scrollbar-corner {
+    display: none;
+}
+
+
+html{
+    font-size: 62.5%;
+}
+
+body{
+    font-size: 1.4rem;
+    min-height: 100vh;
+    width: 100vw;
+    padding-top: 2rem;
+    padding-bottom: 5rem;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(45deg,#ff97c13e, #fff 68%, #ff97c13e);
+}
+
+img{
+    max-width: 8rem;
+    object-fit: contain;
+}
+
+.heading{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.heading h2{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+.heading h2 span{
+    font-size: 20rem;
+    font-family: "Anton", sans-serif;
+    background: -webkit-linear-gradient(#FFBF9D, #FFBF9D, #FF97C1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(1px 1px 2px #ff0066);
+}
+
+.heading p{
+    margin-top: -3rem;
+    font-size: 2rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    letter-spacing: -0.5px;
+    word-spacing: 3px;
+    font-family: "Courgette", sans-serif;
+}
+
+.heading p .bar{
+    width: 10rem;
+    height: 0.1rem;
+    background: #0000006b;
+}
+
+.heading p .styled-promise{
+    display: inline-block;
+    padding: 1rem 2rem;
+    background: linear-gradient(45deg, #FFBF9D, #f9b1ce);
+    color: #000000;
+    border-radius: 1rem;
+    font-style: italic;
+    font-family: "Anton", sans-serif;
+    font-weight: normal;
+    letter-spacing: normal;
+    box-shadow: 1px 1px 2px #ff0066;
+}
+
+.container{
+    margin-top: 5rem;
+}
+
+pre{
+    padding-block: 5rem;
+    padding-inline: 0 !important;
+    font-size: 1.3rem !important;
+}
+
+pre code{
+    margin-block: 2rem !important;
+}
+
+.with-bg{
+    background: #24242E;
+    border-radius: 1rem;
+    padding: 1rem;
+}
+
+.max-height pre{
+    height: 130vh;
+}
+
+.use-cases{
+    text-align: center;
+    padding: 3rem 2rem;
+    height: 100%;
+    border-radius: 1rem;
+    background: #fff;
+    box-shadow: 0 0 50px #f9b1ce7c;
+}
+
+.tabs{
+    height: 110vh;
+}
+
+.tab-buttons {
+    margin: auto;
+    padding: 0.8rem 2rem;
+    border-radius: 1rem;
+    width: fit-content;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    margin-top: 2rem;
+    box-shadow: inset 1px 1px 0px rgba(0, 0, 0, 0.1), inset -1px -1px 0px rgba(0, 0, 0, 0.1);
+    background: rgba(25, 18, 21, 0.079);
+}
+
+.tab-btn {
+    color: #000000cb;
+    border: none;
+    padding: 0.5rem 1.2rem;
+    cursor: pointer;
+    font-size: 1.3rem;
+    border-radius: 1rem;
+    transition: background-color 0.3s;
+    background: transparent;
+}
+
+.tab-btn.active {
+    background-color: #ffffff;
+    color: #000;
+    box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+
+.tab-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 1rem;
+}
+
+.tab-item {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    width: 100%;
+    height: fit-content;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 10px;
+    transition: left 0.5s ease-in-out;
+}
+
+.tab-item.active {
+    left: 0;
+}
+
+.tab-item.prev {
+    left: -100%;
+}
+
+
+.tab-content-heading{
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+.tab-content p{
+    font-size: 1.3rem;
+    opacity: 0.7;
+    margin-top: 0.5rem;
+    margin-bottom: 3rem;
+}
+
+.input-container{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.input-container input{
+    width: 100%;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 1rem 2rem;
+    border-radius: 1rem;
+    outline: none;
+}
+
+.action-btn{
+    padding: 1rem 2rem;
+    border-radius: 1rem;
+    outline: none;
+    background: linear-gradient(45deg, #FFBF9D, #f9b1ce);
+    color: #000000;
+    border-radius: 1rem;
+    font-weight: 500;
+    letter-spacing: normal;
+    box-shadow: 1px 1px 2px #ff0066;
+    border: none;
+    cursor: pointer;
+}
+
+.output-container{
+    width: 100%;
+    border-radius: 1rem;
+    padding: 1rem;
+    margin-top: 1rem;
+}
+
+.output-container p{
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    font-weight: 500;
+    opacity: 1;
+}
+
+.output-container .output{
+    background: rgba(0, 0, 0, 0.05);
+    width: 100%;
+    padding: 1rem;
+    border-radius: 1rem;
+    min-height: 5rem;
+}
+
+.output p{
+    font-size: 1.3rem;
+    font-weight: 400;
+}
+
+.tab-content .tab-item pre, .tab-content .tab-item pre code{
+    height: 45rem !important;
+}
+
+.tab-content .tab-item pre{
+    border-radius: 1rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    margin-top: 2rem;
+}
+
+.loader {
+    border: 2px solid #f3f3f3; 
+    border-top: 2px solid #ff0066; 
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto; 
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@media (max-width: 1000px) { 
+    .max-height:nth-child(2){
+        margin-top: 5rem;
+    }
+    .tabs{
+        height: 120vh;
+    }
+}
+
+
+@media (max-width: 768px) { 
+    .heading h2 span{
+        font-size: 12rem;
+    }
+}
+
+@media (max-width: 500px) { 
+    .tabs{
+        height: 130vh;
+    }
+    .heading h2 span{
+        font-size: 8rem;
+    }
+    .heading p{
+        font-size: 1.4rem;
+        margin-top: 0rem;
+    }
+    .heading .styled-promise{
+        padding: 0.5rem 1rem !important;
+    }
+}

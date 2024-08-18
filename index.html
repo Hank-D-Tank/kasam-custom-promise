@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism-themes/1.9.0/prism-duotone-space.min.css"
+        integrity="sha512-QXwARzyR5/KTWULy+3O5V57CaYhT/sKpQtXFO5z3F4gZwghZGXgR3ACsZesQ9CKUlaOFUToSWKxwSnMAsaNPOQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap-grid.min.css"
+        integrity="sha512-i1b/nzkVo97VN5WbEtaPebBG8REvjWeqNclJ6AItj7msdVcaveKrlIIByDpvjk5nwHjXkIqGZscVxOrTb9tsMA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="style.css">
+    <title>Kasam - A New Way To Promise!</title>
+</head>
+
+<body>
+    <div class="heading">
+        <h2><span>Kasam</span> <img src="pinky-promise.png" alt=""></h2>
+        <p>A new way to make <span class="bar"></span> <span class="styled-promise">Promises.</span></p>
+    </div>
+    <div class="container">
+        <div class="row gx-5">
+            <div class="col-lg-6 max-height">
+                <div class="with-bg">
+                    <pre><code class="language-javascript">
+        class Kasam {
+            constructor(executor) {
+                this.state = 'pending';
+                this.value = undefined;
+                this.reason = undefined;
+                this.handlers = [];
+            
+                const resolve = (value) => {
+                    if (this.state === 'pending') {
+                        this.state = 'fulfilled';
+                        this.value = value;
+                        this.handlers.forEach(this._handle);
+                    }
+                };
+            
+                const reject = (reason) => {
+                    if (this.state === 'pending') {
+                        this.state = 'rejected';
+                        this.reason = reason;
+                        this.handlers.forEach(this._handle);
+                    }
+                };
+            
+                try {
+                    executor(resolve, reject);
+                } catch (error) {
+                    reject(error);
+                }
+            }
+            
+            _handle = ({ onSuccess, onFail }) => {
+                if (this.state === 'fulfilled') {
+                    if (onSuccess) onSuccess(this.value);
+                } else if (this.state === 'rejected') {
+                    if (onFail) onFail(this.reason);
+                }
+            }
+            
+            then(onSuccess, onFail) {
+                return new Kasam((resolve, reject) => {
+                    const handleFulfilled = () => {
+                        try {
+                            const result = onSuccess ? onSuccess(this.value) : this.value;
+                            resolve(result);
+                        } catch (error) {
+                            reject(error);
+                        }
+                    };
+            
+                    const handleRejected = () => {
+                        try {
+                            if (onFail) {
+                                const result = onFail(this.reason);
+                                resolve(result);
+                            } else {
+                                reject(this.reason);
+                            }
+                        } catch (error) {
+                            reject(error);
+                        }
+                    };
+            
+                    if (this.state === 'fulfilled') {
+                        handleFulfilled();
+                    } else if (this.state === 'rejected') {
+                        handleRejected();
+                    } else {
+                        this.handlers.push({ onSuccess: handleFulfilled, onFail: handleRejected });
+                    }
+                });
+            }
+            
+            catch(onFail) {
+                return this.then(null, onFail);
+            }
+        }
+</code></pre>
+                </div>
+            </div>
+            <div class="col-lg-6 max-height">
+                <div class="use-cases">
+                    <h2>Kasamified Functions</h2>
+                    <div class="tabs">
+                        <div class="tab-buttons">
+                            <button class="tab-btn active" data-tab="1">Set TimeOut</button>
+                            <button class="tab-btn" data-tab="2">Fetch Data</button>
+                            <button class="tab-btn" data-tab="3">Read File</button>
+                        </div>
+                        <div class="tab-content">
+                            <div class="tab-item active" id="tab-1">
+                                <div class="tab-content-heading">Set TimeOut Kasamified</div>
+                                <p>Wait For A Specified Amount Of Time</p>
+                                <div class="input-container">
+                                    <input type="number" placeholder="E.g. 3000ms" value="0">
+                                    <button class="action-btn" id="setTimeout">Wait</button>
+                                </div>
+                                <div class="output-container">
+                                    <p>Your Output</p>
+                                    <div class="output">
+                                        <p>No Output Yet</p>
+                                    </div>
+                                </div>
+                                <pre><code class="language-javascript">
+    const kasamifiedSetTimeout = (delay) => {
+        return new Kasam((resolve) => {
+            setTimeout(() => {
+                resolve(`Waited ${delay}ms using Kasamified SetTimeout`);
+            }, delay);
+        });
+    };
+    kasamifiedSetTimeout(1000)
+    .then(result => {
+        console.log(result);
+    })
+    .catch(error => {
+        console.error("Error:", error.message);
+    });
+                                </code></pre>
+                            </div>
+                            <div class="tab-item" id="tab-2">
+                                <div class="tab-content-heading">Fetch Data Kasamified</div>
+                                <p>Fetch Data From An API</p>
+                                <div class="input-container">
+                                    <input type="text" placeholder="E.g. https://jsonplaceholder.typicode.com/todos/1"
+                                        value="https://jsonplaceholder.typicode.com/todos/1">
+                                    <button class="action-btn" id="fetchData">Fetch</button>
+                                </div>
+                                <div class="output-container">
+                                    <p>Your Output</p>
+                                    <div class="output">
+                                        <p>No Output Yet</p>
+                                    </div>
+                                </div>
+                                <pre><code class="language-javascript">
+    const kasamifiedFetch = (url) => {
+        return new Kasam((resolve, reject) => {
+            fetch(url)
+            .then(response => response.json())
+            .then(data => resolve(data))
+            .catch(error => reject(error));
+        });
+    };
+    kasamifiedFetch('https://jsonplaceholder.typicode.com/todos/1')
+    .then(data => {
+        console.log(data);
+    })
+    .catch(error => {
+        console.error("Error:", error.message);
+    });
+                                </code></pre>
+                            </div>
+                            <div class="tab-item" id="tab-3">
+                                <div class="tab-content-heading">Read File Kasamified</div>
+                                <p>Read Data From A Text File</p>
+                                <div class="input-container">
+                                    <input type="file" id="fileInput" accept=".txt">
+                                    <button class="action-btn" id="readFile">Read</button>
+                                </div>
+                                <div class="output-container">
+                                    <p>Your Output</p>
+                                    <div class="output">
+                                        <p>No Output Yet</p>
+                                    </div>
+                                </div>
+                                <pre><code class="language-javascript">
+    const kasamifiedReadFile = (file) => {
+        return new Kasam((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                if (e.target && typeof e.target.result === 'string') {
+                    resolve(e.target.result);
+                } else {
+                    reject(new Error('Failed to read file'));
+                }
+            };
+            reader.onerror = () => reject(new Error('Failed to read file'));
+            reader.readAsText(file);
+        });
+    };
+    
+    const handleFiles = async () => {
+        try {
+            const fileContents = await Promise.all(files.map(file => kasamifiedReadFile(file)));
+            console.log('File contents:', fileContents);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+    
+                                </code></pre>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/prism.min.js"
+        integrity="sha512-UOoJElONeUNzQbbKQbjldDf9MwOHqxNz49NNJJ1d90yp+X9edsHyJoAs6O4K19CZGaIdjI5ohK+O2y5lBTW6uQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="index.js"></script>
+    <script>
+        document.querySelectorAll('.tab-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const tabNumber = button.getAttribute('data-tab');
+                const currentActiveBtn = document.querySelector('.tab-btn.active');
+                const currentActiveTab = document.querySelector('.tab-item.active');
+    
+                if (currentActiveBtn) currentActiveBtn.classList.remove('active');
+                if (currentActiveTab) currentActiveTab.classList.remove('active');
+    
+                button.classList.add('active');
+                document.getElementById(`tab-${tabNumber}`).classList.add('active');
+            });
+        });
+    
+        const kasamifiedSetTimeout = (delay) => {
+            return new Kasam((resolve) => {
+                setTimeout(() => {
+                    resolve(`Waited ${delay}ms using Kasamified SetTimeout`);
+                }, delay);
+            });
+        };
+    
+        const kasamifiedFetch = (url) => {
+            return new Kasam((resolve, reject) => {
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => resolve(data))
+                    .catch(error => reject(error));
+            });
+        };
+    
+        const kasamifiedReadFile = (file) => {
+            return new Kasam((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = () => reject(new Error('Failed to read file'));
+                reader.readAsText(file);
+            });
+        };
+    
+        document.querySelector('#setTimeout').addEventListener('click', () => {
+            const inputElement = document.querySelector('input');
+            let inputValue = inputElement.value.trim();
+    
+            if (inputValue === '') {
+                inputValue = '0';
+                inputElement.value = '0';
+            }
+    
+            const outputDiv = document.querySelector('.output');
+            const waitButton = document.querySelector('#setTimeout');
+    
+            waitButton.disabled = true;
+            waitButton.textContent = 'Waiting...';
+    
+            outputDiv.innerHTML = '<div class="loader"></div>';
+    
+            kasamifiedSetTimeout(Number(inputValue)).then(result => {
+                outputDiv.innerHTML = `<p>${result}</p>`;
+                waitButton.textContent = 'Wait';
+                waitButton.disabled = false;
+            });
+        });
+    
+        document.getElementById('fetchData').addEventListener('click', () => {
+            const inputElement = document.querySelector('#tab-2 .input-container input');
+            const inputValue = inputElement.value.trim() || 'https://jsonplaceholder.typicode.com/todos/1';
+    
+            const outputDiv = document.querySelector('#tab-2 .output');
+            const fetchButton = document.getElementById('fetchData');
+    
+            fetchButton.disabled = true;
+            fetchButton.textContent = 'Fetching...';
+    
+            outputDiv.innerHTML = '<div class="loader"></div>';
+    
+            kasamifiedFetch(inputValue).then(data => {
+                outputDiv.innerHTML = `<p>${JSON.stringify(data, null, 2)}</p>`;
+                fetchButton.textContent = 'Fetch';
+                fetchButton.disabled = false;
+            }).catch(error => {
+                outputDiv.innerHTML = `<p>Error: ${error.message}</p>`;
+                fetchButton.textContent = 'Fetch';
+                fetchButton.disabled = false;
+            });
+        });
+    
+        document.getElementById('readFile').addEventListener('click', () => {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+    
+            if (!file) {
+                alert('Please select a file first.');
+                return;
+            }
+    
+            const outputDiv = document.querySelector('#tab-3 .output');
+            const readButton = document.getElementById('readFile');
+    
+            readButton.disabled = true;
+            readButton.textContent = 'Reading...';
+    
+            outputDiv.innerHTML = '<div class="loader"></div>';
+    
+            kasamifiedReadFile(file).then(content => {
+                outputDiv.innerHTML = `<p>${content}</p>`;
+                readButton.textContent = 'Read';
+                readButton.disabled = false;
+            }).catch(error => {
+                outputDiv.innerHTML = `<p>Error: ${error.message}</p>`;
+                readButton.textContent = 'Read';
+                readButton.disabled = false;
+            });
+        });
+    
+        document.querySelector('input').addEventListener('focus', (event) => {
+            event.target.select();
+        });
+    </script>
+    
+
+
+</body>
+
+</html>
