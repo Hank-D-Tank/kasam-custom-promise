@@ -1,0 +1,1 @@
+#custom promise class, named as Kasam, for FUN!
